@@ -19,7 +19,7 @@
 \newcommand{\note}[1]{\textcolor{blue}{{#1}}}
 
 \title{
-  Title of your project \\
+  SemiBERT: Boosting NLP Tasks with Semi-Supervised Learning \\
   \vspace{1em}
   \small{\normalfont Stanford CS224N Default Project}  % Select one and delete the other
 }
@@ -109,7 +109,10 @@ data augmentation techniques to inject noise into the input data.
 % Summarize what contributions this paper makes, whether they be in new algorithms, new experimental results and analysis, new meta-analysis of old papers, new datasets, or otherwise.
 This paper demonstrates that effective data augmentation can significantly enhance 
 SSL. The \textbf{Unsupervised Data Augmentation (UDA)} framework employs advanced data 
-augmentation techniques, such as back-translation for NLP and RandAugment for vision, 
+augmentation techniques, such as back-translation 
+\footnote{This process involves translating an existing example in 
+language $A$ into another language $B$, then translating it back to $A$ to obtain an 
+augmented example.} for NLP and RandAugment \cite{NEURIPS2020_d85b63ef} for vision, 
 as noise injection methods for SSL. UDA achieves top performance on 
 various benchmarks and integrates well with transfer learning. For instance, 
 fine-tuning from BERT with limited labeled examples can match or even surpass a model 
@@ -130,8 +133,8 @@ the data augmentation process, where $\hat x = q(x)$ represents the augmented in
 We are trying to find $\theta$ that minimizes the following loss function:
 $\boldmath \min_{\theta} J(\theta) = \mathcal{L}_{\text{sup}} + \lambda \mathcal{L}_{\text{unsup}}$,
 where $\mathcal{L}_{\text{sup}}$ is the supervised loss, $\mathcal{L}_{\text{unsup}}$ is
-the unsupervised loss, $\lambda$ is the regularization coefficient, usually
-set to $\lambda = 1$ in this paper.
+the unsupervised loss, $\lambda$ is the regularization coefficient, here
+sets to $\lambda = 1$ in this paper.
 
 The supervised loss primarily uses cross-entropy, but the authors propose a technique 
 called Training Signal Annealing (TSA), which dynamically selects a subset of the labeled 
@@ -150,8 +153,8 @@ on unlabeled data, denoted as $\hat y_{<ul>}$, and the augmented version, denote
 $\hat y_{<aug>}$.
 To focus on producing consistent data augmentation, the authors propose 
 confidence-based masking. Here, loss is only calculated on a subset of the unlabeled 
-data $U_t$ at step $t$, where $U_t = \{x \in U \mid p_{\theta}(x) > \beta\}$. $\beta$ 
-is a high constant (typically 0.8), including only samples where the model is confident,
+data $U_t$ at step $t$, where $U_t = \{x \in U \mid p_{\theta}(x) > \beta\}$, where $\beta$ 
+is a constant (here sets to 0.8), including only unlabeled samples where the model is confident,
 so that the consistency loss can concentrate more on the distribution discrepancies 
 resulting from suboptimal data augmentation.
 Moreover, the authors claimed that sharpened predictions for unlabeled data will
@@ -161,13 +164,13 @@ the unsupervised loss is:
 \begin{align*}
   \mathcal{L}_{\text{unsup}}
   &= - \sum_{j=1}^{|U_t|} p_{\tilde{\theta}}^{\text{sharp}}(x_j) \log 
-  \frac{p_{\theta}(q(x))}{p_{\tilde{\theta}}^{\text{sharp}}(x_j)}
+  \frac{p_{\theta}(q(x_j))}{p_{\tilde{\theta}}^{\text{sharp}}(x_j)}
 \end{align*}
 
 Note that the term $p_{\tilde{{\theta}}}(x_j)^{\text{sharp}}$ uses a \textit{fixed} copy of the current parameters, 
 denoted as $\tilde{\theta}$, to indicate that the gradient is not propagated through $\tilde{\theta}$.
 This is to ensure the loss is minimizing the divergence against a stable reference against
-current model parameters.
+current model parameters \cite{miyato2018virtual}.
 
 In conclusion, the authors demonstrate that advanced data augmentation techniques 
 provide a superior source of noise for consistency enforcing SSL. UDA performs 
@@ -184,8 +187,8 @@ advanced supervised augmentation techniques to the SSL setting for various tasks
 While UDA excels in binary classifications and NLP tasks with limited training samples, 
 it falls short in multi-class tasks like Yelp-5 and Amazon-5 datasets. The paper 
 relies heavily on empirical results, lacking in-depth mathematical reasoning and 
-research into the benefits of the adjusted loss function. This leaves future 
-researchers unsure of where to focus. Despite these limitations, UDA's design is 
+research into the benefits of the adjusted loss function.
+Despite these limitations, UDA's design is 
 sound and applicable to a variety of tasks in both language and vision, inspiring the 
 transformation of supervised tasks into a semi-supervised manner.
 
@@ -194,14 +197,17 @@ transformation of supervised tasks into a semi-supervised manner.
 % Maybe it came up first on Google Scholar, or a TA suggested it\dots regardless, discuss your motivation for choosing this paper or the topic that the paper it addressed.
 % What interested you about the topic?
 % Having read it in depth, do you feel like you've gained from it what you were hoping? (``No'' is an okay answer here.)
-Many top-performing solutions on multi-task NLP benchmarks like GLUE and SuperGLUE 
+Many top-performing solutions \cite{zhong2022efficient, wang2021zerolabel, raffel2023exploring} 
+on multi-task NLP benchmarks like GLUE \cite{wang2019glue} 
+and SuperGLUE \cite{wang2019superglue} 
 have adopted UDA's framework. They utilize the powerful knowledge retrieval ability of 
-recent large language models (LLMs) and gain from semi-supervised learning, which 
+recent pretrained neural language models (PLMs) and gain from semi-supervised learning, which 
 offers more training data and robust generalization. In numerous real-world scenarios, 
 companies often lack high-quality annotated data, and online open-source datasets for 
 research are not tailored for specific use cases. UDA's method highlights 
 opportunities for using generator model as a data augmentation approach for few-shot or even 
-zero-shot learning. It's inspiring to see the approach and results of this early paper 
+zero-shot learning \cite{meng2022generating}. 
+It's inspiring to see the approach and results of this early paper 
 focusing on this topic.
 
 \paragraph{Wider research context.}
@@ -235,7 +241,7 @@ into a semi-supervised setting for robust and generalizable model training. By
 implementing key aspects of the original BERT and utilizing its pre-trained weights, 
 we aim to establish a strong baseline in supervised NLP tasks. We then transition to 
 a semi-supervised setting using back-translation for noise injection, as suggested by 
-UDA. Additionally, we plan to experiment with large language models (LLMs) to generate 
+UDA. Additionally, we plan to experiment with PLMs to generate 
 synthetic examples, advancing our understanding of their potential in few-shot and 
 zero-shot learning scenarios. This project seeks to answer whether BERT, combined with 
 innovative semi-supervised techniques, can significantly improve performance in NLP 
@@ -257,7 +263,7 @@ using the Stanford Sentiment Treebank (SST) dataset (5-classes) and the CFIMDB m
 reviews dataset (binary classes). For the extended downstream tasks, we will use the 
 SST for sentiment analysis, the Quora dataset for paraphrase detection, and the SemEval 
 SST Benchmark dataset for semantic textual similarity tasks. Moreover, we will use 
-data augmentation data generated by LLMs as an unlabeled dataset to improve the
+data augmentation data generated by PLMs as an unlabeled dataset to improve the
 generalization of the BERT model.
 
 
@@ -270,9 +276,7 @@ generalization of the BERT model.
 Initially, we will adhere to the default project handouts to implement minBERT and 
 conduct baseline tasks on SST and CFIMDB datasets. Additionally, we plan to leverage 
 UDA techniques, utilizing the proposed loss function, and creating augmented examples 
-through back-translation. This process involves translating an existing example in 
-language $A$ into another language $B$, then translating it back to $A$ to obtain an 
-augmented example. We aim to leverage TogetherAI to create such augmented examples. 
+through back-translation. We aim to leverage TogetherAI to create such augmented examples. 
 Subsequently, BERT will be fine-tuned in a semi-supervised manner, aiming to boost 
 performance on multiple downstream tasks.
 
@@ -284,22 +288,49 @@ in the default project handout. This will serve as our baseline. All extensions 
 be evaluated against this baseline.
 
 \paragraph{Evaluation.}
-Specify at least one well-defined, numerical, automatic evaluation metric you will use for quantitative evaluation. 
-What existing scores will you be comparing against for this metric? For example, if you're reimplementing or extending a method, state what score(s) the original method achieved; if you're applying an existing method to a new task, mention the state-of-the-art performance on the new task, and say something about how you expect your method to perform compared to other approaches.
-If you have any particular ideas about the qualitative evaluation you will do, you can describe that too.
+% Specify at least one well-defined, numerical, automatic evaluation metric you will use for quantitative evaluation. 
+% What existing scores will you be comparing against for this metric? For example, if you're reimplementing or extending a method, state what score(s) the original method achieved; if you're applying an existing method to a new task, mention the state-of-the-art performance on the new task, and say something about how you expect your method to perform compared to other approaches.
+% If you have any particular ideas about the qualitative evaluation you will do, you can describe that too.
+For classification SST and CFIMDB, we will use accuracy and 
+F1 score as measures.
+For the Quora dataset, we use accuracy as the evaluation metric. For the STS dataset, 
+we use the Pearson correlation of the true similarity values against the predicted 
+similarity values. 
 
 \paragraph{Ethics.}
-What are the ethical challenges and possible societal risks of your project,
-and what are mitigation strategies? Please provide a 1 paragraph description of A) the ethical challenges and possible negative societal risks regarding your project, identifying at least 2 valid ethical concerns or potential
-societal risks, and B) some practical, specific strategies to mitigate those
-risks (you are not required to implement these mitigation strategies). Try
-to be a little specific and intentional in describing ethical concerns (e.g.
-more depth than ‘there will be issues with user data privacy’), and especially around issues specific to your project. Writing clear limitations and
-identifying potential risks is something that we’re encouraging as part of
-a broader trend in the research community to include such statements as
-part of published research. This includes Stanford’s Ethics and Society
-Review (ESR) and the EMNLP Impact Statement, which are great resources for getting started. This section will be graded primarily for effort
-and intentionality, and feedback may be provided.
+% What are the ethical challenges and possible societal risks of your project,
+% and what are mitigation strategies? Please provide a 1 paragraph description of 
+% A) the ethical challenges and possible negative societal risks regarding your project, 
+% identifying at least 2 valid ethical concerns or potential
+% societal risks, and B) some practical, specific strategies to mitigate those
+% risks (you are not required to implement these mitigation strategies). Try
+% to be a little specific and intentional in describing ethical concerns (e.g.
+% more depth than ‘there will be issues with user data privacy’), and especially around issues specific to your project. Writing clear limitations and
+% identifying potential risks is something that we’re encouraging as part of
+% a broader trend in the research community to include such statements as
+% part of published research. This includes Stanford’s Ethics and Society
+% Review (ESR) and the EMNLP Impact Statement, which are great resources for getting started. This section will be graded primarily for effort
+% and intentionality, and feedback may be provided.
+Integrating BERT with Unsupervised Data Augmentation (UDA) in semi-supervised NLP tasks 
+poses ethical challenges and societal risks. Bias or toxicity amplification is a concern. 
+Pre-existing social biases or toxic language in training data and PLMs
+could be amplified in semi-supervised training setups. This can occur when 
+the model is reinforced on a biased corpus.
+Additionally, using synthetic data generated by PLMs for 
+training could lead to misinformation. This can occur if the model generates plausible 
+but factually incorrect or misleading content. While this risk is less significant in 
+classification tasks, it could pose serious risks if these embeddings are used in a 
+text generation model.
+
+Recent studies propose various approaches to mitigate biases and toxicity in PLMs. 
+PowerTransformer \cite{ma-etal-2020-powertransformer} debiases text and paraphrases 
+generated content to reduce biases. It shows promising results in addressing gender 
+bias in movie script character portrayals. Other controllable generation methods block 
+toxic prompts, but they are less successful than fine-tuning the model on clean corpora 
+\cite{gehman-etal-2020-realtoxicityprompts}.
+Existing models or APIs could be leveraged to add a screening process to the data 
+generated by PLMs. This process would filter out toxic content and rephrase text 
+that contains social biases, helping to mitigate the amplification issue.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
