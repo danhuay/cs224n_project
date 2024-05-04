@@ -1,0 +1,307 @@
+\documentclass{article}
+
+\usepackage[final]{neurips_2019}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{changepage}% http://ctan.org/pkg/changepage
+
+\newcommand{\note}[1]{\textcolor{blue}{{#1}}}
+
+\title{
+  Title of your project \\
+  \vspace{1em}
+  \small{\normalfont Stanford CS224N Default Project}  % Select one and delete the other
+}
+
+\author{
+  Danhua Yan \\
+  Department of Computer Science \\
+  Stanford University \\
+  \texttt{dhyan@stanford.edu} \\
+  % Examples of more authors
+%   \And
+%   Name \\
+%   Department of Computer Science \\
+%   Stanford University \\
+%   \texttt{name@stanford.edu} \\
+%   \And
+%   Name \\
+%   Department of Computer Science \\
+%   Stanford University \\
+%   \texttt{name@stanford.edu}
+}
+
+\begin{document}
+
+\maketitle
+
+% \begin{abstract}
+%   Required for final report
+% \end{abstract}
+
+
+% \note{This template is built on NeurIPS 2019 template\footnote{\url{https://www.overleaf.com/latex/templates/neurips-2019/tprktwxmqmgk}} and provided for your convenience.}
+
+
+\section{Key Information to include}
+
+No external collaborators | Not sharing projects
+
+% \begin{itemize}
+%     \item External collaborators (if you have any): N/A
+%     % \item Mentor (custom project only):
+%     \item Sharing project: N/A
+% \end{itemize}
+
+
+\section{Research paper summary}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{Title} & Unsupervised Data Augmentation for Consistency Training \\
+        \midrule
+        \textbf{Authors} &  Qizhe Xie, Zihang Dai, Eduard Hovy, Minh-Thang Luong, Quoc V. Le \\
+        \textbf{Venue} & Conference on Neural Information Processing Systems (NeurIPS) \\
+        \textbf{Year}  & 2020 \\
+        \textbf{URL}   & \url{https://arxiv.org/abs/1904.12848v6} \\
+        \bottomrule
+    \end{tabular}
+    \vspace{1em}
+    \caption{Bibliographical information~\cite{xie2020unsupervised}.}
+\end{table}
+
+\paragraph{Background.}
+% Set the scene for the paper, looking to the introduction section, as well as the related work or background sections, if they exist.
+% What motivations and problems do the authors cite when explaining why they think this work is important? 
+% What problems are they attempting to solve, or what knowledge are they hoping to discover?
+
+Semi-supervised learning (SSL) is a widely used approach that leverages unlabeled data to 
+enhance the performance of supervised learning tasks. 
+This is a field that has received considerable attention in deep learning, 
+as high-performing models generally require a substantial amount of high-quality labeled data, 
+which is often costly to acquire.
+SSL could be particularly beneficial for building robust and 
+generalizable multi-task NLU models. These models, designed to handle a variety of 
+linguistic tasks, typically require abundant data from each task. However, labeled data 
+for some tasks are notably scarcer than for others.
+
+Among the SSL methods, consistency training - which involves ensuring a model produces 
+consistent outputs for an unlabeled example even when it is slightly altered 
+(\textit{i.e.} injecting small noise) - has proven to be effective across numerous benchmarks.
+In this study, the authors strive to improve SSL consistency training by leveraging advanced
+data augmentation techniques to inject noise into the input data.
+
+\paragraph{Summary of contributions.}
+% Each paper is published because it adds something to the ongoing research conversation. It teaches us something we didn't know before, or provides us with a tool we didn't have, etc.
+% Summarize what contributions this paper makes, whether they be in new algorithms, new experimental results and analysis, new meta-analysis of old papers, new datasets, or otherwise.
+This paper demonstrates that effective data augmentation can significantly enhance 
+SSL. The \textbf{Unsupervised Data Augmentation (UDA)} framework employs advanced data 
+augmentation techniques, such as back-translation for NLP and RandAugment for vision, 
+as noise injection methods for SSL. UDA achieves top performance on 
+various benchmarks and integrates well with transfer learning. For instance, 
+fine-tuning from BERT with limited labeled examples can match or even surpass a model 
+trained on a larger dataset. On the IMDb text classification dataset, with only 20 
+labeled examples, UDA achieves an error rate of 4.20, outperforming the state-of-the-art 
+model trained on 25,000 labeled examples.
+
+Utilizing advanced data augmentation requires ensuring the augmented data is of high 
+quality and consistent with the original data distribution. Additionally, it's crucial 
+to address situations where a significant gap exists between the amounts of labeled and 
+unlabeled data, as the model could quickly overfit the labeled data. The authors 
+considered these factors when designing the loss function.
+
+Formally, given a mix of labeled dataset $L$ and unlabeled dataset $U$, we're trying to 
+learn a classification model $p_{\theta}$ with parameters $\theta$, that maps a given input $x$
+to a class distribution $\hat y = p_{\theta}(x)$. Let $q(\cdot)$ denote 
+the data augmentation process, where $\hat x = q(x)$ represents the augmented input. 
+We are trying to find $\theta$ that minimizes the following loss function:
+$\boldmath \min_{\theta} J(\theta) = \mathcal{L}_{\text{sup}} + \lambda \mathcal{L}_{\text{unsup}}$,
+where $\mathcal{L}_{\text{sup}}$ is the supervised loss, $\mathcal{L}_{\text{unsup}}$ is
+the unsupervised loss, $\lambda$ is the regularization coefficient, usually
+set to $\lambda = 1$ in this paper.
+
+The supervised loss primarily uses cross-entropy, but the authors propose a technique 
+called Training Signal Annealing (TSA), which dynamically selects a subset of the labeled 
+dataset, $L_t$, at each training step $t$. The idea is to exclude easy predictions at 
+each step, helping the model learn from difficult samples and avoid overfitting the 
+labeled dataset too quickly. At each step $t$, the subset $L_t = \{x \in L \mid 
+p_{\theta}(x) < \eta(t)\}$. The threshold function $\eta(\cdot)$ sets a dynamic 
+threshold at each step $t$. Depending on the dataset characteristics, one can choose 
+log, linear, or exponential functions for $\eta(\cdot)$. In conclusion, the supervised loss
+is:
+$$\mathcal{L}_{\text{sup}} = - \sum_{i=1}^{|L_t|} y_i \log p_{\theta}(x_i)$$
+
+The unsupervised loss is defined as the consistency loss between the unlabeled and 
+augmented data inputs. It's the KL-divergence between the predicted class distributions 
+on unlabeled data, denoted as $\hat y_{<ul>}$, and the augmented version, denoted as 
+$\hat y_{<aug>}$.
+To focus on producing consistent data augmentation, the authors propose 
+confidence-based masking. Here, loss is only calculated on a subset of the unlabeled 
+data $U_t$ at step $t$, where $U_t = \{x \in U \mid p_{\theta}(x) > \beta\}$. $\beta$ 
+is a high constant (typically 0.8), including only samples where the model is confident,
+so that the consistency loss can concentrate more on the distribution discrepancies 
+resulting from suboptimal data augmentation.
+Moreover, the authors claimed that sharpened predictions for unlabeled data will
+further improve performance, by adjusting Softmax temperature $\tau$ to 0.4. Concretely,
+$\hat y_{<ul>} = p_{\tilde{\theta}}^{\text{sharp}}(x), \hat y_{<aug>} = p_{\theta}(q(x))$,
+the unsupervised loss is:
+\begin{align*}
+  \mathcal{L}_{\text{unsup}}
+  &= - \sum_{j=1}^{|U_t|} p_{\tilde{\theta}}^{\text{sharp}}(x_j) \log 
+  \frac{p_{\theta}(q(x))}{p_{\tilde{\theta}}^{\text{sharp}}(x_j)}
+\end{align*}
+
+Note that the term $p_{\tilde{{\theta}}}(x_j)^{\text{sharp}}$ uses a \textit{fixed} copy of the current parameters, 
+denoted as $\tilde{\theta}$, to indicate that the gradient is not propagated through $\tilde{\theta}$.
+This is to ensure the loss is minimizing the divergence against a stable reference against
+current model parameters.
+
+In conclusion, the authors demonstrate that advanced data augmentation techniques 
+provide a superior source of noise for consistency enforcing SSL. UDA performs 
+exceptionally well in text and vision tasks, rivaling fully supervised models trained 
+on larger datasets. This sheds light on future research opportunities to transfer 
+advanced supervised augmentation techniques to the SSL setting for various tasks.
+
+\paragraph{Limitations and discussion.}
+% Every research paper has limitations and flaws.
+% Using the discussion and conclusion sections if they exist, critically identify interesting experiments, methodology, or methods that might have made this paper stronger.
+% For example, did the authors only evaluate on English, or only on Wikipedia text, and claim that their results generalize to all of language?
+% Did the authors not characterize the errors their model makes compared to previous models?
+% Discuss how these limitations contextualize the findings of the paper -- do you still find the paper convincing?
+While UDA excels in binary classifications and NLP tasks with limited training samples, 
+it falls short in multi-class tasks like Yelp-5 and Amazon-5 datasets. The paper 
+relies heavily on empirical results, lacking in-depth mathematical reasoning and 
+research into the benefits of the adjusted loss function. This leaves future 
+researchers unsure of where to focus. Despite these limitations, UDA's design is 
+sound and applicable to a variety of tasks in both language and vision, inspiring the 
+transformation of supervised tasks into a semi-supervised manner.
+
+\paragraph{Why this paper?}
+% There are infinite papers you could read, and you chose to read this one.
+% Maybe it came up first on Google Scholar, or a TA suggested it\dots regardless, discuss your motivation for choosing this paper or the topic that the paper it addressed.
+% What interested you about the topic?
+% Having read it in depth, do you feel like you've gained from it what you were hoping? (``No'' is an okay answer here.)
+Many top-performing solutions on multi-task NLP benchmarks like GLUE and SuperGLUE 
+have adopted UDA's framework. They utilize the powerful knowledge retrieval ability of 
+recent large language models (LLMs) and gain from semi-supervised learning, which 
+offers more training data and robust generalization. In numerous real-world scenarios, 
+companies often lack high-quality annotated data, and online open-source datasets for 
+research are not tailored for specific use cases. UDA's method highlights 
+opportunities for using generator model as a data augmentation approach for few-shot or even 
+zero-shot learning. It's inspiring to see the approach and results of this early paper 
+focusing on this topic.
+
+\paragraph{Wider research context.}
+% Each research paper is a focused contribution, targeting a very specific problem setting.
+% However, each paper also fits into the broader story of NLP research -- designing systems that process human languages.
+% In this course, we cover some fundamental concepts: how to represent language, what structure language has, why language is hard for computers to model, what problems tend to occur when applying deep learning methods to language.
+% Connect the paper to these broad topics.
+% Does the paper help us build better representations of language?
+% If it helps us solve a particular task (like automatic translation or question answering,) do the methods have any promise for being more broadly applicable to other tasks (e.g., a new type of regularization in LSTMs applied in language modeling might be applicable to other NLP tasks!)
+% It may be useful to do a cursory read of one or more of the papers cited in the paper you're reviewing, and cite them.
+The UDA framework significantly contributes to NLP research by introducing a novel 
+approach to language representation. It leverages advanced data augmentation techniques 
+like back-translation, enhancing performance on tasks like text classification and 
+promising wider applicability. Techniques like confidence-based masking and Training 
+Signal Annealing could extend to other NLP tasks with labeling concerns. UDA's success 
+in semi-supervised learning scenarios highlights its potential for few-shot or 
+zero-shot learning, a promising future NLP research direction.
+
+
+\section{Project description}
+
+\paragraph{Goal.} 
+% If possible, try to phrase this in terms of a scientific question you are trying to answer -- e.g., your goal may be to investigate whether a particular model or technique performs well at a certain task, or whether you can improve a particular model by adding some new variant, or (for theoretical/analytical projects), you might have some particular hypothesis that you seek to confirm or disprove.
+% Otherwise, your goal may be simply to successfully implement a complex neural model, and show that it performs well on a given task.
+% Briefly motivate why you chose this goal -- why do you think it is important, interesting, challenging and/or likely to succeed?
+% If you have any secondary or stretch goals (i.e. things you will do if you have time), please also describe them.
+% In this section, you should also make it clear how your project relates to your chosen paper.
+The primary goal of this project is to boost supervised NLP tasks performance by 
+integrating BERT with UDA techniques, effectively transforming a supervised problem 
+into a semi-supervised setting for robust and generalizable model training. By 
+implementing key aspects of the original BERT and utilizing its pre-trained weights, 
+we aim to establish a strong baseline in supervised NLP tasks. We then transition to 
+a semi-supervised setting using back-translation for noise injection, as suggested by 
+UDA. Additionally, we plan to experiment with large language models (LLMs) to generate 
+synthetic examples, advancing our understanding of their potential in few-shot and 
+zero-shot learning scenarios. This project seeks to answer whether BERT, combined with 
+innovative semi-supervised techniques, can significantly improve performance in NLP 
+tasks with limited labeled data, leveraging the strengths of both supervised and 
+unsupervised approaches.
+
+\paragraph{Task.} 
+% This could be the same task as addressed by your chosen paper, but it doesn't have to be. Describe the task clearly (i.e. give an example of an input and an output, if applicable) -- though if you already did this in the paper summary, there's no need to repeat. 
+After implementing key aspects of the original BERT model, 
+load pre-trained weights into the BERT model. 
+Perform sentiment analysis on the SST and CFIMDB datasets. 
+Extend the BERT embeddings to simultaneously perform three tasks: 
+sentiment analysis, paraphrase detection, and semantic textual similarity.
+
+\paragraph{Data.}
+% Specify the dataset(s) you will use (including its size), and describe any preprocessing you plan to do. If you plan to collect your own data, describe how you will do that and how long you expect it to take.
+For the baseline NLP tasks, we will use the BERT model to perform sentiment analysis 
+using the Stanford Sentiment Treebank (SST) dataset (5-classes) and the CFIMDB movie 
+reviews dataset (binary classes). For the extended downstream tasks, we will use the 
+SST for sentiment analysis, the Quora dataset for paraphrase detection, and the SemEval 
+SST Benchmark dataset for semantic textual similarity tasks. Moreover, we will use 
+data augmentation data generated by LLMs as an unlabeled dataset to improve the
+generalization of the BERT model.
+
+
+\paragraph{Methods.}
+% Describe the models and/or techniques you plan to use.
+% If it's already described in the paper summary, no need to repeat.
+% If you plan to explore a variant to a published method, focus on describing how your method will be different.
+% Make it clear which parts you plan to implement yourself, and which parts you will download from elsewhere. 
+% If there is any part of your planned method that is original, make it clear.
+Initially, we will adhere to the default project handouts to implement minBERT and 
+conduct baseline tasks on SST and CFIMDB datasets. Additionally, we plan to leverage 
+UDA techniques, utilizing the proposed loss function, and creating augmented examples 
+through back-translation. This process involves translating an existing example in 
+language $A$ into another language $B$, then translating it back to $A$ to obtain an 
+augmented example. We aim to leverage TogetherAI to create such augmented examples. 
+Subsequently, BERT will be fine-tuned in a semi-supervised manner, aiming to boost 
+performance on multiple downstream tasks.
+
+\paragraph{Baselines.}
+% Describe what methods you will use as baselines. Make it clear if these will be implemented by you, downloaded from elsewhere, or if you will just compare with previously published scores.
+We will use pre-trained weights from the BERT model without finetuning as embeddings. 
+The pooled output will be projected to a linear layer for classification, as described 
+in the default project handout. This will serve as our baseline. All extensions will 
+be evaluated against this baseline.
+
+\paragraph{Evaluation.}
+Specify at least one well-defined, numerical, automatic evaluation metric you will use for quantitative evaluation. 
+What existing scores will you be comparing against for this metric? For example, if you're reimplementing or extending a method, state what score(s) the original method achieved; if you're applying an existing method to a new task, mention the state-of-the-art performance on the new task, and say something about how you expect your method to perform compared to other approaches.
+If you have any particular ideas about the qualitative evaluation you will do, you can describe that too.
+
+\paragraph{Ethics.}
+What are the ethical challenges and possible societal risks of your project,
+and what are mitigation strategies? Please provide a 1 paragraph description of A) the ethical challenges and possible negative societal risks regarding your project, identifying at least 2 valid ethical concerns or potential
+societal risks, and B) some practical, specific strategies to mitigate those
+risks (you are not required to implement these mitigation strategies). Try
+to be a little specific and intentional in describing ethical concerns (e.g.
+more depth than ‘there will be issues with user data privacy’), and especially around issues specific to your project. Writing clear limitations and
+identifying potential risks is something that we’re encouraging as part of
+a broader trend in the research community to include such statements as
+part of published research. This includes Stanford’s Ethics and Society
+Review (ESR) and the EMNLP Impact Statement, which are great resources for getting started. This section will be graded primarily for effort
+and intentionality, and feedback may be provided.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}
