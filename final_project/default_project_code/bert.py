@@ -46,7 +46,7 @@ class BertSelfAttention(nn.Module):
         
         bs, _, seq_len, _ = key.shape
         # key, query, value has shape (batch, num_attention_heads, seq_len, attention_head_size)
-        S = (key @ query.transpose(-2, -1)) / math.sqrt(self.attention_head_size)
+        S = (query @ key.transpose(-2, -1)) / math.sqrt(self.attention_head_size)
         
         # attention mask has 0 for non-padding tokens and -inf for padding tokens
         S = S + attention_mask
