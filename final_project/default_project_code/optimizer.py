@@ -60,7 +60,30 @@ class AdamW(Optimizer):
                 # Refer to the default project handout for more details.
 
                 ### TODO
-                raise NotImplementedError
+                
+                if len(state) == 0:
+                    state['m'] = torch.zeros_like(p.data).to(grad.device)
+                    state['v'] = torch.zeros_like(p.data).to(grad.device)
+                    state['t'] = 0
+                
+                beta1, beta2 = group["betas"]
+                eps = group["eps"]
+                weight_decay = group["weight_decay"]
+                correct_bias = group["correct_bias"]
 
+                # for each step
+                
+                state['t'] += 1
+                state['m'] = beta1 * state['m']  + (1 - beta1) * grad
+                state['v'] = beta2 * state['v']  + (1 - beta2) * grad ** 2
+                
+                if correct_bias:
+                    alpha_t = alpha * math.sqrt(1 - beta2 ** state['t']) / (1 - beta1 ** state['t'])
+                else:
+                    alpha_t = alpha
+                p.data -= alpha_t * state['m'] / (torch.sqrt(state['v']) + eps)
+            
+                if weight_decay != 0:
+                    p.data -= alpha * weight_decay * p.data
 
         return loss
