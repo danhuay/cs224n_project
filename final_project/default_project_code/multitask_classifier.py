@@ -82,7 +82,7 @@ class ParaphraseClassifier(nn.Module):
 
     def __init__(self, config):
         super(ParaphraseClassifier, self).__init__()
-        self.n_class = 2
+        self.n_class = 1
         self.model = nn.Sequential(
             nn.Dropout(config.hidden_dropout_prob),
             nn.Linear(config.hidden_size * 2, config.hidden_size),
