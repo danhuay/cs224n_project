@@ -58,8 +58,6 @@ class AdamW(Optimizer):
                 # 3. Update parameters (p.data).
                 # 4. Apply weight decay after the main gradient-based updates.
                 # Refer to the default project handout for more details.
-
-                ### TODO
                 
                 if len(state) == 0:
                     state['m'] = torch.zeros_like(p.data).to(grad.device)
