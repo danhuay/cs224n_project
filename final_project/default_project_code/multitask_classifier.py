@@ -85,7 +85,8 @@ class ParaphraseClassifier(nn.Module):
         self.n_class = 2
         self.model = nn.Sequential(
             nn.Dropout(config.hidden_dropout_prob),
-            nn.Linear(config.hidden_size * 2, self.n_class),
+            nn.Linear(config.hidden_size * 2, config.hidden_size),
+            nn.Linear(config.hidden_size, self.n_class)
         )
 
     def forward(self, embeddings_1, embeddings_2):
@@ -106,7 +107,8 @@ class TextualSimilarity(nn.Module):
         self.n_class = 1
         self.model = nn.Sequential(
             nn.Dropout(config.hidden_dropout_prob),
-            nn.Linear(config.hidden_size * 2, self.n_class),
+            nn.Linear(config.hidden_size * 2, config.hidden_size),
+            nn.Linear(config.hidden_size, self.n_class)
         )
 
     def forward(self, embeddings_1, embeddings_2):
