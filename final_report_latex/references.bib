@@ -1,0 +1,191 @@
+@article{xie2020unsupervised,
+  title={Unsupervised data augmentation for consistency training},
+  author={Xie, Qizhe and Dai, Zihang and Hovy, Eduard and Luong, Thang and Le, Quoc},
+  journal={Advances in neural information processing systems},
+  volume={33},
+  pages={6256--6268},
+  year={2020}
+}
+
+@inproceedings{ma-etal-2020-powertransformer,
+    title = "{P}ower{T}ransformer: Unsupervised Controllable Revision for Biased Language Correction",
+    author = "Ma, Xinyao  and
+      Sap, Maarten  and
+      Rashkin, Hannah  and
+      Choi, Yejin",
+    editor = "Webber, Bonnie  and
+      Cohn, Trevor  and
+      He, Yulan  and
+      Liu, Yang",
+    booktitle = "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
+    month = nov,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.emnlp-main.602",
+    doi = "10.18653/v1/2020.emnlp-main.602",
+    pages = "7426--7441",
+    abstract = "Unconscious biases continue to be prevalent in modern text and media, calling for algorithms that can assist writers with bias correction. For example, a female character in a story is often portrayed as passive and powerless ({``}{\_}She daydreams about being a doctor{\_}{''}) while a man is portrayed as more proactive and powerful ({``}{\_}He pursues his dream of being a doctor{\_}{''}). We formulate **Controllable Debiasing**, a new revision task that aims to rewrite a given text to correct the implicit and potentially undesirable bias in character portrayals. We then introduce PowerTransformer as an approach that debiases text through the lens of connotation frames (Sap et al., 2017), which encode pragmatic knowledge of implied power dynamics with respect to verb predicates. One key challenge of our task is the lack of parallel corpora. To address this challenge, we adopt an unsupervised approach using auxiliary supervision with related tasks such as paraphrasing and self-supervision based on a reconstruction loss, building on pretrained language models. Through comprehensive experiments based on automatic and human evaluations, we demonstrate that our approach outperforms ablations and existing methods from related tasks. Furthermore, we demonstrate the use of PowerTransformer as a step toward mitigating the well-documented gender bias in character portrayal in movie scripts.",
+}
+
+@inproceedings{gehman-etal-2020-realtoxicityprompts,
+    title = "{R}eal{T}oxicity{P}rompts: Evaluating Neural Toxic Degeneration in Language Models",
+    author = "Gehman, Samuel  and
+      Gururangan, Suchin  and
+      Sap, Maarten  and
+      Choi, Yejin  and
+      Smith, Noah A.",
+    editor = "Cohn, Trevor  and
+      He, Yulan  and
+      Liu, Yang",
+    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2020",
+    month = nov,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.findings-emnlp.301",
+    doi = "10.18653/v1/2020.findings-emnlp.301",
+    pages = "3356--3369",
+    abstract = "Pretrained neural language models (LMs) are prone to generating racist, sexist, or otherwise toxic language which hinders their safe deployment. We investigate the extent to which pretrained LMs can be prompted to generate toxic language, and the effectiveness of controllable text generation algorithms at preventing such toxic degeneration. We create and release RealToxicityPrompts, a dataset of 100K naturally occurring, sentence-level prompts derived from a large corpus of English web text, paired with toxicity scores from a widely-used toxicity classifier. Using RealToxicityPrompts, we find that pretrained LMs can degenerate into toxic text even from seemingly innocuous prompts. We empirically assess several controllable generation methods, and find that while data- or compute-intensive methods (e.g., adaptive pretraining on non-toxic data) are more effective at steering away from toxicity than simpler solutions (e.g., banning {``}bad{''} words), no current method is failsafe against neural toxic degeneration. To pinpoint the potential cause of such persistent toxic degeneration, we analyze two web text corpora used to pretrain several LMs (including GPT-2; Radford et. al, 2019), and find a significant amount of offensive, factually unreliable, and otherwise toxic content. Our work provides a test bed for evaluating toxic generations by LMs and stresses the need for better data selection processes for pretraining.",
+}
+
+@inproceedings{NEURIPS2020_d85b63ef,
+ author = {Cubuk, Ekin Dogus and Zoph, Barret and Shlens, Jon and Le, Quoc},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {H. Larochelle and M. Ranzato and R. Hadsell and M.F. Balcan and H. Lin},
+ pages = {18613--18624},
+ publisher = {Curran Associates, Inc.},
+ title = {RandAugment: Practical Automated Data Augmentation with a Reduced Search Space},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2020/file/d85b63ef0ccb114d0a3bb7b7d808028f-Paper.pdf},
+ volume = {33},
+ year = {2020}
+}
+
+@article{miyato2018virtual,
+  title={Virtual adversarial training: a regularization method for supervised and semi-supervised learning},
+  author={Miyato, Takeru and Maeda, Shin-ichi and Koyama, Masanori and Ishii, Shin},
+  journal={IEEE transactions on pattern analysis and machine intelligence},
+  volume={41},
+  number={8},
+  pages={1979--1993},
+  year={2018},
+  publisher={IEEE}
+}
+
+@article{wang2019superglue,
+   title={Super{GLUE}: A Stickier Benchmark for General-Purpose Language Understanding Systems},
+   author={Alex Wang and Yada Pruksachatkun and Nikita Nangia and Amanpreet Singh and Julian Michael and Felix Hill and Omer Levy and Samuel R. Bowman},
+   journal={arXiv preprint 1905.00537},
+   year={2019}
+ }
+
+@inproceedings{wang2019glue,
+    title={{GLUE}: A Multi-Task Benchmark and Analysis Platform for Natural Language Understanding},
+    author={Wang, Alex and Singh, Amanpreet and Michael, Julian and Hill, Felix and Levy, Omer and Bowman, Samuel R.},
+    note={In the Proceedings of ICLR.},
+    year={2019}
+ }
+
+ @misc{zhong2022efficient,
+      title={Toward Efficient Language Model Pretraining and Downstream Adaptation via Self-Evolution: A Case Study on SuperGLUE}, 
+      author={Qihuang Zhong and Liang Ding and Yibing Zhan and Yu Qiao and Yonggang Wen and Li Shen and Juhua Liu and Baosheng Yu and Bo Du and Yixin Chen and Xinbo Gao and Chunyan Miao and Xiaoou Tang and Dacheng Tao},
+      year={2022},
+      eprint={2212.01853},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+@misc{wang2021zerolabel,
+      title={Towards Zero-Label Language Learning}, 
+      author={Zirui Wang and Adams Wei Yu and Orhan Firat and Yuan Cao},
+      year={2021},
+      eprint={2109.09193},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+@misc{raffel2023exploring,
+      title={Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer}, 
+      author={Colin Raffel and Noam Shazeer and Adam Roberts and Katherine Lee and Sharan Narang and Michael Matena and Yanqi Zhou and Wei Li and Peter J. Liu},
+      year={2023},
+      eprint={1910.10683},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+
+@article{meng2022generating,
+  title={Generating training data with language models: Towards zero-shot language understanding},
+  author={Meng, Yu and Huang, Jiaxin and Zhang, Yu and Han, Jiawei},
+  journal={Advances in Neural Information Processing Systems},
+  volume={35},
+  pages={462--477},
+  year={2022}
+}
+
+@misc{reimers2019sentencebert,
+      title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks}, 
+      author={Nils Reimers and Iryna Gurevych},
+      year={2019},
+      eprint={1908.10084},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+@misc{devlin2019bert,
+      title={BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding}, 
+      author={Jacob Devlin and Ming-Wei Chang and Kenton Lee and Kristina Toutanova},
+      year={2019},
+      eprint={1810.04805},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+@INPROCEEDINGS{choi2021eval,
+  author={Choi, Hyunjin and Kim, Judong and Joe, Seongho and Gwon, Youngjune},
+  booktitle={2020 25th International Conference on Pattern Recognition (ICPR)}, 
+  title={Evaluation of BERT and ALBERT Sentence Embedding Performance on Downstream NLP Tasks}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={5482-5487},
+  keywords={Computational modeling;Bit error rate;Semantics;Natural languages;Computer architecture;Benchmark testing;Pattern recognition},
+  doi={10.1109/ICPR48806.2021.9412102}
+}
+
+@misc{cttarvainen2018mean,
+  title={Mean teachers are better role models: Weight-averaged consistency targets improve semi-supervised deep learning results}, 
+  author={Antti Tarvainen and Harri Valpola},
+  year={2018},
+  eprint={1703.01780},
+  archivePrefix={arXiv},
+  primaryClass={cs.NE}
+}
+
+@misc{ctrasmus2015semisupervised,
+  title={Semi-Supervised Learning with Ladder Networks}, 
+  author={Antti Rasmus and Harri Valpola and Mikko Honkala and Mathias Berglund and Tapani Raiko},
+  year={2015},
+  eprint={1507.02672},
+  archivePrefix={arXiv},
+  primaryClass={cs.NE}
+}
+
+@inproceedings{ctlaine2017temporal,
+  title={Temporal Ensembling for Semi-Supervised Learning},
+  author={Samuli Laine and Timo Aila},
+  booktitle={International Conference on Learning Representations},
+  year={2017},
+  url={https://openreview.net/forum?id=BJ6oOfqge}
+}
+
+@inproceedings{ctNIPS2014_66be31e4,
+ author = {Bachman, Philip and Alsharif, Ouais and Precup, Doina},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {Z. Ghahramani and M. Welling and C. Cortes and N. Lawrence and K.Q. Weinberger},
+ pages = {},
+ publisher = {Curran Associates, Inc.},
+ title = {Learning with Pseudo-Ensembles},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2014/file/66be31e4c40d676991f2405aaecc6934-Paper.pdf},
+ volume = {27},
+ year = {2014}
+}
